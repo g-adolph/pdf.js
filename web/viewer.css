@@ -1966,3 +1966,10 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
     display: none;
   }
 }
+
+
+@media print {
+  body {
+    display: none;
+  }
+}

@@ -186,6 +186,14 @@ function webViewerLoad() {
       SystemJS.import('pdfjs-web/genericcom'),
       SystemJS.import('pdfjs-web/pdf_print_service'),
     ]).then(function([app, appOptions, ...otherModules]) {
+      let queryString = document.location.search.slice(1);
+      let m = /(^|&)file=([^&]*)/.exec(queryString);
+      defaultUrl = m ? decodeURIComponent(m[2]) : '';
+      if(!defaultUrl){
+        defaultUrl = "//gskvideo.edgesuite.net/UniCCampoDigital/_UniCCampoDigital/13102016155222ba433eb9297e4cc8bb75c44b0fbb03f8.pdf";
+      }
+      appOptions.AppOptions.set('defaultUrl', defaultUrl);
+
       window.PDFViewerApplication = app.PDFViewerApplication;
       window.PDFViewerApplicationOptions = appOptions.AppOptions;
       app.PDFViewerApplication.run(config);
