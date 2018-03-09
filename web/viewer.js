@@ -3967,6 +3967,20 @@ function webViewerLoad() {
   window.PDFViewerApplication = pdfjsWebApp.PDFViewerApplication;
   window.PDFViewerApplicationOptions = pdfjsWebAppOptions.AppOptions;
   pdfjsWebApp.PDFViewerApplication.run(config);
+
+  var elementsToRemove = [
+    'download',
+    'openFile',
+    'print',
+    'cursorSelectTool'
+  ];
+
+  elementsToRemove.forEach((element) => {
+    var el = document.getElementById(element);
+    if (el) {
+      el.remove();
+    }
+  });
 }
 if (document.readyState === 'interactive' || document.readyState === 'complete') {
   webViewerLoad();
