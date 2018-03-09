@@ -3954,6 +3954,16 @@ function getViewerConfiguration() {
 }
 function webViewerLoad() {
   var config = getViewerConfiguration();
+  var config = getViewerConfiguration();
+  var queryString = document.location.search.slice(1);
+  var m = /(^|&)file=([^&]*)/.exec(queryString);
+  var defaultUrl = m ? decodeURIComponent(m[2]) : '';
+  if (!defaultUrl) {
+    defaultUrl = '//gskvideo.edgesuite.net/UniCCampoDigital/_UniCCampoDigital/13102016155222ba433eb9297e4cc8bb75c44b0fbb03f8.pdf';
+  }
+  
+  pdfjsWebAppOptions.AppOptions.set('defaultUrl', defaultUrl);
+
   window.PDFViewerApplication = pdfjsWebApp.PDFViewerApplication;
   window.PDFViewerApplicationOptions = pdfjsWebAppOptions.AppOptions;
   pdfjsWebApp.PDFViewerApplication.run(config);
