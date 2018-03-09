@@ -3981,6 +3981,11 @@ function webViewerLoad() {
       el.remove();
     }
   });
+
+  window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+  });
+  
 }
 if (document.readyState === 'interactive' || document.readyState === 'complete') {
   webViewerLoad();
