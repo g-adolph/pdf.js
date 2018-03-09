@@ -179,6 +179,9 @@ function getViewerConfiguration() {
 
 function webViewerLoad() {
   let config = getViewerConfiguration();
+  let queryString = document.location.search.slice(1);
+  let m = /(^|&)file=([^&]*)/.exec(queryString);
+  let defaultUrl = m ? decodeURIComponent(m[2]) : '';
   if (typeof PDFJSDev === 'undefined' || !PDFJSDev.test('PRODUCTION')) {
     Promise.all([
       SystemJS.import('pdfjs-web/app'),
@@ -186,11 +189,9 @@ function webViewerLoad() {
       SystemJS.import('pdfjs-web/genericcom'),
       SystemJS.import('pdfjs-web/pdf_print_service'),
     ]).then(function([app, appOptions, ...otherModules]) {
-      let queryString = document.location.search.slice(1);
-      let m = /(^|&)file=([^&]*)/.exec(queryString);
-      defaultUrl = m ? decodeURIComponent(m[2]) : '';
-      if(!defaultUrl){
-        defaultUrl = "//gskvideo.edgesuite.net/UniCCampoDigital/_UniCCampoDigital/13102016155222ba433eb9297e4cc8bb75c44b0fbb03f8.pdf";
+      
+      if(!defaultUrl) {
+        defaultUrl = '//gskvideo.edgesuite.net/UniCCampoDigital/_UniCCampoDigital/13102016155222ba433eb9297e4cc8bb75c44b0fbb03f8.pdf';
       }
       appOptions.AppOptions.set('defaultUrl', defaultUrl);
 
@@ -203,10 +204,30 @@ function webViewerLoad() {
       pdfjsWebAppOptions.AppOptions.set('defaultUrl', defaultUrl);
     }
 
+    if (!defaultUrl) {
+      defaultUrl = '//gskvideo.edgesuite.net/UniCCampoDigital/_UniCCampoDigital/13102016155222ba433eb9297e4cc8bb75c44b0fbb03f8.pdf';
+    }
+
+    pdfjsWebAppOptions.AppOptions.set('defaultUrl', defaultUrl);
+
     window.PDFViewerApplication = pdfjsWebApp.PDFViewerApplication;
     window.PDFViewerApplicationOptions = pdfjsWebAppOptions.AppOptions;
     pdfjsWebApp.PDFViewerApplication.run(config);
   }
+
+  let elementsToRemove = [
+    'download',
+    'openFile',
+    'print',
+    'cursorSelectTool'
+  ];
+
+  elementsToRemove.forEach((element) => {
+    const el = document.getElementById(element);
+    if (el) {
+      el.remove();
+    }
+  });
 }
 
 if (document.readyState === 'interactive' ||
