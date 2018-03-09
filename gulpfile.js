@@ -797,15 +797,20 @@ gulp.task('firefox', ['firefox-pre'], function (done) {
     env: { 'TZ': 'UTC', },
   };
 
-  exec('zip -r ' + FIREFOX_EXTENSION_NAME + ' ' +
-       FIREFOX_EXTENSION_FILES.join(' '), zipExecOptions, function (err) {
-    if (err) {
-      done(new Error('Cannot exec zip: ' + err));
-      return;
-    }
-    console.log('extension created: ' + FIREFOX_EXTENSION_NAME);
-    done();
-  });
+  if (process.platform !== 'win32') {
+    exec('zip -r ' + FIREFOX_EXTENSION_NAME + ' ' +
+        FIREFOX_EXTENSION_FILES.join(' '), zipExecOptions, function (err) {
+      if (err) {
+        done(new Error('Cannot exec zip: ' + err));
+        return;
+      }
+      console.log('extension created: ' + FIREFOX_EXTENSION_NAME);
+      done();
+    });
+  } else {
+    console.log('unable to create : ' + FIREFOX_EXTENSION_NAME);
+      done();
+  }
 });
 
 gulp.task('mozcentral-pre', ['buildnumber', 'locale'], function () {
